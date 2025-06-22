@@ -48,6 +48,11 @@ The documentation is available [here](https://docs.google.com/document/d/1aJhwK2
     - Predictor for rolling ball position and velocity
     - Relative/absolute position & orientation of every body part & joint through forward kinematics and vision
     - Sample train environments
+        - `scripts/gyms/Basic_Run.py`
+        - `scripts/gyms/Fall.py`
+        - `scripts/gyms/Get_Up.py`
+        - `scripts/gyms/Walk.py`
+        - `scripts/gyms/Dribble.py`
     - User-friendly interface to check active arguments and launch utilities & gyms
 
 ## Citing the Project
