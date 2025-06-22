@@ -53,6 +53,7 @@ The documentation is available [here](https://docs.google.com/document/d/1aJhwK2
         - `scripts/gyms/Get_Up.py`
         - `scripts/gyms/Walk.py`
         - `scripts/gyms/Dribble.py`
+        - `scripts/gyms/Sprint.py`
     - User-friendly interface to check active arguments and launch utilities & gyms
 
 ## Citing the Project
