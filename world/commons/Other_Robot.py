@@ -10,6 +10,7 @@ class Other_Robot():
         self.unum = unum                # convenient variable to indicate uniform number (same as other robot's index + 1)
         self.is_self = False            # convenient flag to indicate if this robot is self
         self.is_teammate = is_teammate  # convenient variable to indicate if this robot is from our team
+        self.current_role = 'support'   # last known role if teammate
         self.is_visible = False # True if this robot was seen in the last message from the server (it doesn't mean we know its absolute location)
         self.body_parts_cart_rel_pos = dict()  # cartesian relative position of the robot's visible body parts
         self.body_parts_sph_rel_pos = dict()   # spherical relative position of the robot's visible body parts
@@ -26,3 +27,4 @@ class Other_Robot():
         self.state_ground_area = None          # (pt_2d,radius) projection of player area on ground (circle), not precise if farther than 3m (for performance), useful for obstacle avoidance when it falls
         self.state_body_parts_abs_pos = dict() # 3D absolute position of each body part
         self.state_filtered_velocity = np.zeros(3) # 3D filtered velocity (m/s) (if the head is not visible, the 2D part is updated and v.z decays)
+

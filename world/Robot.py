@@ -45,6 +45,7 @@ class Robot():
 
         self.body_parts = dict()    # 键='身体部位名称'(由agent的XML给出),值='Body_Part对象'
         self.unum = unum            # agent的球衣号码
+        self.current_role = 'support'  # 当前角色, 由 Role_Manager 更新
         self.gyro = np.zeros(3)     # agent躯干沿三个自由轴的角速度(deg/s)
         self.acc  = np.zeros(3)     # agent躯干沿三个自由轴的适当加速度(m/s2)
         self.frp = dict() # 脚 "lf"/"rf",脚趾 "lf1"/"rf1" 阻力感知器(相对[p]点原点 + [f]力向量)例如 {"lf":(px,py,pz,fx,fy,fz)}
