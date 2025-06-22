@@ -27,3 +27,4 @@ class Other_Robot():
         self.state_ground_area = None          # (pt_2d,radius) projection of player area on ground (circle), not precise if farther than 3m (for performance), useful for obstacle avoidance when it falls
         self.state_body_parts_abs_pos = dict() # 3D absolute position of each body part
         self.state_filtered_velocity = np.zeros(3) # 3D filtered velocity (m/s) (if the head is not visible, the 2D part is updated and v.z decays)
+
