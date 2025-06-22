@@ -46,10 +46,11 @@ class Behavior():
         from behaviors.custom.Dribble.Dribble import Dribble
         from behaviors.custom.Fall.Fall import Fall
         from behaviors.custom.Get_Up.Get_Up import Get_Up
+        from behaviors.custom.Pass.Pass import Pass
         from behaviors.custom.Step.Step import Step
         from behaviors.custom.Walk.Walk import Walk
 
-        classes = [Basic_Kick,Dribble,Fall,Get_Up,Step,Walk]
+        classes = [Basic_Kick,Dribble,Fall,Get_Up,Pass,Step,Walk]
 
         '''---- 手动声明结束 ----'''
 

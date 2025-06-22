@@ -23,6 +23,7 @@ profile
 
 # ignore test files in root folder
 /test*
+/tests/
 
 # ignore bundle folder but not bundle script
 /bundle/*

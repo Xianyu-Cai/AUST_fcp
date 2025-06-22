@@ -10,6 +10,7 @@ class Other_Robot():
         self.unum = unum                # convenient variable to indicate uniform number (same as other robot's index + 1)
         self.is_self = False            # convenient flag to indicate if this robot is self
         self.is_teammate = is_teammate  # convenient variable to indicate if this robot is from our team
+        self.current_role = 'support'   # last known role if teammate
         self.is_visible = False # True if this robot was seen in the last message from the server (it doesn't mean we know its absolute location)
         self.body_parts_cart_rel_pos = dict()  # cartesian relative position of the robot's visible body parts
         self.body_parts_sph_rel_pos = dict()   # spherical relative position of the robot's visible body parts

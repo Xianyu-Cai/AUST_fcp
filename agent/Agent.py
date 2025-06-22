@@ -1,4 +1,5 @@
 from agent.Base_Agent import Base_Agent
+from agent.Role_Manager import Role_Manager
 from math_ops.Math_Ops import Math_Ops as M
 import math
 import numpy as np
@@ -21,6 +22,7 @@ class Agent(Base_Agent):
         self.kick_distance = 0
         self.fat_proxy_cmd = "" if is_fat_proxy else None
         self.fat_proxy_walk = np.zeros(3) # fat proxy的过滤行走参数
+        self.role_manager = Role_Manager(self.world)
 
         self.init_pos = ([-14,0],[-9,-5],[-9,0],[-9,5],[-5,-5],[-5,0],[-5,5],[-1,-6],[-1,-2.5],[-1,2.5],[-1,6])[unum-1] # 初始阵型
 
@@ -156,6 +158,7 @@ class Agent(Base_Agent):
         self.min_opponent_ball_dist = math.sqrt(min(opponents_ball_sq_dist)) # 球和最近对手之间的距离
 
         active_player_unum = teammates_ball_sq_dist.index(min_teammate_ball_sq_dist) + 1
+        self.role_manager.update_role(active_player_unum)
 
 
         #--------------------------------------- 2. 决定行动
@@ -199,7 +202,20 @@ class Agent(Base_Agent):
                 else: # 移动到球的位置，但将自己定位在球和我们球门之间
                     self.move(slow_ball_pos + M.normalize_vec((-16,0) - slow_ball_pos) * 0.2, is_aggressive=True)
             else:
-                self.state = 0 if self.kick(goal_dir,9,False,enable_pass_command) else 2
+                if self.min_opponent_ball_dist < 1.0:
+                    others = [(i,d) for i,d in enumerate(teammates_ball_sq_dist) if i != r.unum-1]
+                    if others:
+                        idx,dist_val = min(others, key=lambda x:x[1])
+                        teammate = w.teammates[idx]
+                        if teammate.state_abs_pos is not None and dist_val < min_teammate_ball_sq_dist:
+                            behavior.execute("Pass", teammate.state_abs_pos[:2])
+                            self.state = 2
+                        else:
+                            self.state = 0 if self.kick(goal_dir,9,False,enable_pass_command) else 2
+                    else:
+                        self.state = 0 if self.kick(goal_dir,9,False,enable_pass_command) else 2
+                else:
+                    self.state = 0 if self.kick(goal_dir,9,False,enable_pass_command) else 2
 
             path_draw_options(enable_obstacles=False, enable_path=False) # 禁用路径绘图
 

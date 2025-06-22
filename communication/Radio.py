@@ -24,6 +24,8 @@ class Radio():
     SYMB = "!#$%&*+,-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~;"
     SLEN = len(SYMB)
     SYMB_TO_IDX = {ord(s):i for i,s in enumerate(SYMB)}
+    ROLE_TO_CHAR = {'goalkeeper':'G','striker':'S','support':'U'}
+    CHAR_TO_ROLE = {v:k for k,v in ROLE_TO_CHAR.items()}
 
 
     def __init__(self, world : World, commit_announcement) -> None:
@@ -211,6 +213,11 @@ class Radio():
             msg += Radio.SYMB[combination % Radio.SLEN]
             combination //= Radio.SLEN
 
+        # append role information
+        role_char = Radio.ROLE_TO_CHAR.get(self.world.robot.current_role, 'U')
+        role_msg = f";{self.world.robot.unum}{role_char}"
+        msg += role_msg
+
         #============================================ 3. commit message
 
         self.commit_announcement(msg.encode()) # commit message
@@ -225,12 +232,29 @@ class Radio():
 
         #============================================ 1. get combination
 
+        parts = msg.split(b';', 1)
+        msg_enc = parts[0]
+
+        # update role if payload exists
+        if len(parts) > 1:
+            role_part = parts[1].decode()
+            try:
+                unum = int(role_part[:-1])
+                role_char = role_part[-1]
+                role = Radio.CHAR_TO_ROLE.get(role_char, 'support')
+                if 1 <= unum <= len(w.teammates):
+                    w.teammates[unum-1].current_role = role
+                    if unum == r.unum:
+                        r.current_role = role
+            except Exception:
+                pass
+
         # read first symbol, which cannot be ';' due to server bug
-        combination = Radio.SYMB_TO_IDX[msg[0]]
+        combination = Radio.SYMB_TO_IDX[msg_enc[0]]
         total_combinations = Radio.SLEN-1
 
-        if len(msg)>1:
-            for m in msg[1:]:
+        if len(msg_enc)>1:
+            for m in msg_enc[1:]:
                 combination += total_combinations * Radio.SYMB_TO_IDX[m]
                 total_combinations *= Radio.SLEN
 

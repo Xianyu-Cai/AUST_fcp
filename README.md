@@ -60,3 +60,14 @@ The documentation is available [here](https://docs.google.com/document/d/1aJhwK2
   year={2023}
 }
 ```
+
+## Installation and Configuration
+
+Install dependencies and create your own configuration file:
+
+```bash
+pip install -r requirements.txt
+cp config.example.json config.json
+```
+
+Edit `config.json` to change server address, team name or other options before running `start.sh`.
