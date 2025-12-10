@@ -48,8 +48,9 @@ class Behavior():
         from behaviors.custom.Get_Up.Get_Up import Get_Up
         from behaviors.custom.Step.Step import Step
         from behaviors.custom.Walk.Walk import Walk
+        from behaviors.custom.Wave.Wave import Wave
 
-        classes = [Basic_Kick,Dribble,Fall,Get_Up,Step,Walk]
+        classes = [Basic_Kick,Dribble,Fall,Get_Up,Step,Walk,Wave]
 
         '''---- 手动声明结束 ----'''
 
