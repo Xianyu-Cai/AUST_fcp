@@ -34,13 +34,20 @@ class Wave():
         self.start_time = 0
         
         # 尝试加载训练好的模型 (如果存在)
+        # 使用机器人类型特定的模型文件名
         self.model = None
-        model_path = M.get_active_directory("/behaviors/custom/Wave/wave.pkl")
+        robot_type = self.world.robot.type
+        model_path = M.get_active_directory(f"/behaviors/custom/Wave/wave_R{robot_type}.pkl")
         if os.path.exists(model_path):
             try:
                 with open(model_path, 'rb') as f:
-                    self.model = pickle.load(f)
-                print("Wave: 已加载训练模型")
+                    loaded_model = pickle.load(f)
+                # 验证模型格式 (应该是包含权重列表的结构)
+                if isinstance(loaded_model, list) and len(loaded_model) > 0:
+                    self.model = loaded_model
+                    print(f"Wave: 已加载训练模型 (R{robot_type})")
+                else:
+                    print(f"Wave: 模型格式无效")
             except Exception as e:
                 print(f"Wave: 加载模型失败 - {e}")
         

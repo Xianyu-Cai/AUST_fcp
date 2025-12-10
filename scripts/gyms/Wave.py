@@ -27,18 +27,20 @@ class Wave(gym.Env):
         # J_RARM_PITCH=15, J_RARM_ROLL=17, J_RELBOW_YAW=19, J_RELBOW_ROLL=21
         self.arm_joints = [15, 17, 19, 21]  # 右手臂关节
         
-        # 动作空间: 4个手臂关节的目标角度变化
-        MAX = np.finfo(np.float32).max
+        # 动作空间: 4个手臂关节的目标角度变化 (归一化到 [-1, 1])
         self.action_space = gym.spaces.Box(
-            low=np.full(4, -MAX, np.float32), 
-            high=np.full(4, MAX, np.float32), 
+            low=np.full(4, -1.0, np.float32), 
+            high=np.full(4, 1.0, np.float32), 
             dtype=np.float32
         )
         
         # 观察空间: 关节位置(4) + 时间步(1) + 头部高度(1) + 陀螺仪(3) = 9
+        # 使用合理的边界值
+        obs_low = np.array([-1.8, -1.8, -1.8, -1.8, 0.0, 0.0, -5.0, -5.0, -5.0], dtype=np.float32)
+        obs_high = np.array([1.8, 1.8, 1.8, 1.8, 1.0, 1.0, 5.0, 5.0, 5.0], dtype=np.float32)
         self.observation_space = gym.spaces.Box(
-            low=np.full(9, -MAX, np.float32), 
-            high=np.full(9, MAX, np.float32), 
+            low=obs_low, 
+            high=obs_high, 
             dtype=np.float32
         )
         
@@ -138,8 +140,8 @@ class Wave(gym.Env):
         reward -= gyro_penalty * 0.1
         
         # 4. 挥手动作奖励 (手臂在摆动)
-        arm_roll = r.joints_position[17]  # J_RARM_ROLL
-        arm_roll_velocity = abs(r.joints_speed[17]) if hasattr(r, 'joints_speed') else 0
+        # 使用关节目标速度作为运动指标
+        arm_roll_velocity = abs(r.joints_target_speed[17]) if r.joints_target_speed is not None else 0
         reward += min(arm_roll_velocity * 0.01, 0.2)
         
         return reward
